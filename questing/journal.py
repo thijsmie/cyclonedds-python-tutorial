@@ -11,7 +11,7 @@ from .quests.q12_hey_listen import HeyListenQuest
 
 
 class Journal:
-    _debug_mode = True
+    _debug_mode = False
     _questscls_ch1 = [
         DomainParticipantQuest,
         RemainOnTopicQuest,
