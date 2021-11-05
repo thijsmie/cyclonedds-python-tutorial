@@ -1,4 +1,5 @@
-from pycdr import cdr
+from cyclonedds.idl import IdlStruct
+from dataclasses import dataclass
 from enum import Enum
 
 
@@ -8,21 +9,22 @@ class FishType(Enum):
     Metallic = 2
 
 
-@cdr(typename="__main__::CuriousFish")
-class CuriousFish:
+@dataclass
+class CuriousFish(typename="CuriousFish"):
     fish_type: FishType
     dorsal_fins: int
     fish_name: str
 
 
-@cdr(typename="__main__::Island")
-class Island:
+@dataclass
+class Island(typename="Island"):
     X: float
     Y: float
     size: float
     name: str
 
-@cdr(typename="__main__::Wave")
-class Wave:
+
+@dataclass
+class Wave(typename="Wave"):
     height: int
     volume: float

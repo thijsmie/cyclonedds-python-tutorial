@@ -1,4 +1,3 @@
-
 from questing.quest import Quest
 from cyclonedds.topic import Topic
 
@@ -18,8 +17,8 @@ Then import `Topic` from `cyclonedds.topic` and create a `Topic` named `follower
 
 Example datatype:
 ```python
-@cdr
-class LogbookEntry:
+@dataclass
+class LogbookEntry(IdlStruct):
     timestamp: int
     text: str
     author: str
@@ -38,15 +37,16 @@ quest.prompt()
 quest.start()
 
 from enum import Enum
-from pycdr import cdr
+from dataclasses import dataclass
+from cyclonedds.idl import IdlStruct
 
 class FishType(Enum):
     Shimmering = 0
     Matte = 1
     Metallic = 2
 
-@cdr
-class CuriousFish:
+@dataclass
+class CuriousFish(IdlStruct):
     fish_type: FishType
     dorsal_fins: int
     fish_name: str

@@ -39,8 +39,8 @@ Notes:
 quest.prompt()
 quest.start()
 
-@cdr
-class Island:
+@dataclass
+class Island(IdlStruct):
     X: float
     Y: float
     name: str

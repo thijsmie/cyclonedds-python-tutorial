@@ -42,10 +42,10 @@ Tasks:
 quest.prompt()
 quest.start()
 
-from pycdr.types import uint8
+from cyclonedds.idl.types import uint8
 
-@cdr
-class Tide:
+@dataclass
+class Tide(IdlStruct):
     hour: uint8
     minute: uint8
 

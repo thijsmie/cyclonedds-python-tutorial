@@ -16,12 +16,12 @@ from random import Random
 
 
 
-class HeyListenQuest(Quest):
+class WaitForTheTideQuest(Quest):
     def __init__(self, journal, seed) -> None:
         super().__init__(
             journal=journal,
             seed=seed,
-            name="hey-listen",
+            name="wait-for-the-tide",
             prompt="""
 Tasks:
  * Create a `Wave` datatype and topic. A wave has a `height` as integer (centimeters) and a `volume` as float (decibels).
@@ -37,47 +37,33 @@ Tasks:
  * Wait for the `threading.Event` to fire and read the wave samples iteratively from the datareader
     * All samples are passed to `quest.check("a-lovely-wave", wave)
 """,
-            hints=[
-                "The `Wave` datatype looks as follows: ```python\n@cdr\nclass Wave:\n\theight: int\n\tvolume: float\n\n```",
-                "'MyListener' is defined as follows: ```python\nevent = Event()\nclass MyListener(Listener):\n\tdef on_data_available(self, reader):\n\t\tevent.set()\n```"
-                "`myqos` is defined as `Qos(Policy.Reliability.Reliable(duration(milliseconds=200)))`",
-                "`reader` is defined as `DataReader(participant, topic, qos=myqos, listener=mylistener)`"],
-            solution="""quest = journal.quest("hey-listen")
+            hints=[],
+            solution="""quest = journal.quest("wait-for-the-tide")
 quest.prompt()
 quest.start()
 
-from pycdr import cdr
-from cyclonedds.core import Listener, Qos, Policy
-from cyclonedds.domain import DomainParticipant
-from cyclonedds.topic import Topic
-from cyclonedds.sub import DataReader
-from cyclonedds.util import duration
-from threading import Event
+from cyclonedds.idl.types import uint8
 
-@cdr
-class Wave:
-    height: int
-    loudness: float
+@dataclass
+class Tide(IdlStruct):
+    hour: uint8
+    minute: uint8
 
-quest.check("wave", Wave)
+quest.check("tide", Tide)
 
-event = Event()
-class MyListener(Listener):
-    def on_data_available(self, reader):
-        event.set()
+from cyclonedds.core import WaitSet
 
 participant = DomainParticipant()
-topic = Topic(participant, "Wave", Wave)
-mylistener = MyListener()
-myqos = Qos(Policy.Reliability.Reliable(duration(milliseconds=200)))
-reader = DataReader(participant, topic, qos=myqos, listener=mylistener)
-quest.check("reader", reader)
+topic = Topic(participant, "Tide", Tide)
+reader = DataReader(participant, topic)
+waitset = WaitSet()
 
-event.wait()
+waitset.append(reader)
+waitset.wait()
 
-for wave in reader.read_iter(timeout=duration(milliseconds=200)):
-    print(wave)
-    quest.check("a-lovely-wave", wave)
+tide = reader.read()[0]
+
+quest.check("the-tide-arrived", tide)
 
 quest.finish()"""
         )
