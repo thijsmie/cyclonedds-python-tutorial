@@ -1,0 +1,44 @@
+from questing import Journal
+
+journal = Journal(seed=None)
+print(journal.seed)
+
+quest = journal.quest("koqosnoot")
+quest.start()
+
+from cyclonedds.core import Qos, Policy
+from cyclonedds.util import duration
+
+# Create a Shared or Exclusive Ownership policy. They take no arguments.
+# The solution is under hint 1.
+policy0 = None
+quest.check("policy-0", policy0)
+
+# Create an Automatic Liveliness policy. It takes a lease duration as argument,
+# make that two days. The solution is under hint 2.
+policy1 = None
+quest.check("policy-1", policy1)
+
+# Create a Qos object with a Reliable Reliability policy, taking a max blocking
+# time as argument, set that to 250 milliseconds. Also add a KeepAll History
+# policy, it takes no arguments. The solution is under hint 3.
+qos0 = None
+quest.check("koqosnoot-0", qos0)
+
+# Create any Qos object with 4 policies.
+# An example solution is under hint 4.
+qos1 = None
+quest.check("koqosnoot-1", qos1)
+
+# Create a Qos object with 5 policies by adding one to the previous qos
+# You can inherit other Qos by giving the keyword argument 'base':
+#    qos = Qos(policy1, ..., base=other_qos)
+# An example solution is under hint 5.
+qos2 = None
+quest.check("koqosnoot-2", qos2)
+
+# Example: you can inspect any QoS object by iteration
+# for policy in qos2:
+#    print(policy)
+
+quest.finish()

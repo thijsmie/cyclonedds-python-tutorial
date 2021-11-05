@@ -1,0 +1,45 @@
+# Table of contents
+# Learn more at https://jupyterbook.org/customize/toc.html
+
+format: jb-book
+root: sources/intro
+parts:
+- caption: The Basics
+  chapters:
+  - file: sources/installation
+- caption: Tutorials
+  chapters:
+  - file: sources/tutorials/interactive
+    sections:
+    - file: sources/tutorials/chapter_1
+    - file: sources/tutorials/chapter_2
+- caption: Documentation
+  chapters:
+  - file: sources/documentation/idl_in_python
+  - file: sources/documentation/cmd-introduction
+    sections:
+    - file: sources/documentation/command_line_tools/idlc
+    - file: sources/documentation/command_line_tools/ddsls
+    - file: sources/documentation/command_line_tools/pubsub
+  - file: sources/documentation/keys_instances_samples
+  - file: sources/documentation/api-introduction
+    sections:
+    - file: sources/documentation/api/builtin
+    - file: sources/documentation/api/core
+    - file: sources/documentation/api/domain
+    - file: sources/documentation/api/idl
+      sections:
+      - file: sources/documentation/api/idl-types
+      - file: sources/documentation/api/idl-annotations
+    - file: sources/documentation/api/internal
+    - file: sources/documentation/api/pub
+    - file: sources/documentation/api/sub
+    - file: sources/documentation/api/qos
+    - file: sources/documentation/api/topic
+    - file: sources/documentation/api/util
+- caption: About the project
+  chapters:
+    - url: https://pypi.org/project/cyclonedds
+      title: The cyclonedds package on PyPi
+    - url: https://github.com/eclipse-cyclonedds/cyclonedds-python
+      title: Github repository

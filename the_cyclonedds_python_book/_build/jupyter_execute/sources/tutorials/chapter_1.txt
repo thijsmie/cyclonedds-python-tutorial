@@ -1,0 +1,129 @@
+!pip install --update cmake
+!apt-get install gcc git zip bison
+import subprocess 
+import sys
+import os
+subprocess.call(["git", "clone", "https://github.com/eclipse-cyclonedds/cyclonedds"])
+subprocess.call(["mkdir", "cyclonedds/build", "cyclonedds/install"])
+p = subprocess.Popen(["cmake", "..", "-DCMAKE_INSTALL_PREFIX=../install", "-DENABLE_TOPIC_DISCOVERY=ON", "-DENABLE_TYPE_DISCOVERY=ON"], cwd=os.getcwd()+"/cyclonedds/build", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+output, err = p.communicate()
+if p.returncode != 0:
+  print(output)
+  print(err)
+  return
+p = subprocess.Popen(["cmake", "--build", ".", "--target", "install"], cwd=os.getcwd()+"/cyclonedds/build", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+output, err = p.communicate()
+if p.returncode != 0:
+  print(output)
+  print(err)
+  return
+home = os.getcwd() + "/cyclonedds/install"
+%env CYCLONEDDS_HOME=$home
+%env CMAKE_PREFIX_PATH=$home
+!pip install --upgrade cmake ninja
+!pip install git+https://github.com/eclipse-cyclonedds/cyclonedds-python
+
+from questing import Journal
+
+journal = Journal(seed=None)
+print(journal.seed)
+
+from questing import Journal
+
+journal = Journal(seed=None)
+print(journal.seed)
+
+quest = journal.quest("domain-participant")
+quest.start()
+
+# The import:
+
+# Make participant
+participant = ...
+
+quest.check("domain-participant", participant)
+quest.finish()
+
+quest = journal.quest("remain-on-topic")
+quest.start()
+
+from dataclasses import dataclass
+from cyclonedds.idl import IdlStruct, IdlEnum
+
+class FishType(IdlEnum):
+    Shimmering = 0
+    Matte = 1
+    Metallic = 2
+
+class CuriousFish(IdlStruct):
+    fish_type: FishType
+    # define dorsal_fins
+    # define fish_name
+
+quest.check("curious-fish", CuriousFish)
+
+# import
+
+# create the topic
+topic = ...
+
+quest.check("followers-topic", topic)
+quest.finish()
+
+quest = journal.quest("a-fishy-story")
+quest.start()
+
+# The import
+
+# Create the reader
+reader = ...
+quest.check("fish-reader", reader)
+
+# Take the fish
+fish = ...
+print(fish)
+
+quest.check("freshly-caught", fish)
+quest.finish()
+
+quest = journal.quest("grow-the-fish-supply")
+quest.start()
+
+# The import
+
+# Create the writer
+writer = ...
+quest.check("fish-writer", writer)
+
+# Create a fish
+fish = ...
+
+# Write the fish
+
+quest.finish()
+
+quest = journal.quest("land-ahoy")
+quest.prompt()
+quest.start()
+
+@cdr
+class Island:
+    pass
+
+quest.check("island", Island)
+participant = ...
+topic = ...
+writer = ...
+reader = ...
+
+# create central island
+island = ...
+
+# write central island
+
+quest.check("writer-written", writer)
+
+# read all islands
+islands = ...
+quest.check("the-disposed-atolls", islands)
+quest.finish()

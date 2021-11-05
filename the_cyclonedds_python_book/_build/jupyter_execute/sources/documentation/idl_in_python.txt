@@ -1,0 +1,107 @@
+from cyclonedds.idl.types import uint8, uint16, uint32, uint64, int8, int16, int32, int64, float32, float64
+
+from cyclonedds.idl.types import sequence, array, bounded_str
+from typing import Dict
+
+# sequence, equivalent with a List[int]
+a: sequence[int] = [1, 2, 3]
+
+# bounded sequence, List[int] with a max length
+b: sequence[int, 3] = [1, 2]
+
+# arrays, fixed length List[int]
+c: array[int, 4] = [1, 0, 0, 1]
+
+# maps, simply use typing.Dict
+d: Dict[int, str] = {1: "Hello,", 2: "World!"}
+
+# bounded strings are python str with a max length
+e: bounded_str[200] = "This will fit."
+
+from cyclonedds.idl import IdlStruct
+from dataclasses import dataclass
+
+@dataclass
+class MyMessage(IdlStruct):
+    msg: str
+    sender: str
+
+
+message = MyMessage(msg="Hi there!", sender="CycloneDDS")
+
+from cyclonedds.idl import IdlEnum
+
+
+class MyEnum(IdlEnum):
+    RED = 1
+    BLUE = 2
+    GREEN = 3
+
+
+from cyclonedds.idl import IdlUnion
+from cyclonedds.idl.types import case, default, uint8
+
+
+class MyUnion(IdlUnion, discriminator=uint8):
+    # The case takes a label for the discriminator and a type of the field
+    msg: case[0, str]
+
+    # A case can have multiple labels
+    userid: case[[1, 2], int]
+
+    # But a default has no labels
+    amount: default[int]
+
+
+# MyUnion will get a generated dataclass-like constructor
+a = MyUnion(msg="Hi! We can only fill one member!")
+b = MyUnion(userid=404)
+c = MyUnion(amount=9001)
+
+print(a.discriminator)  # Would print '0'
+# print(a.userid) -> this would error, non-active member!
+print(c.discriminator)  # Lowest non-used field, here would be '3'
+
+# You can also manually specify discriminator and value
+d = MyUnion(
+    discriminator=101,
+    value=0  # discriminator 101 -> default amount is active
+)
+
+from cyclonedds.idl import IdlBitmask
+from dataclasses import dataclass
+
+@dataclass
+class MyBitmask(IdlBitmas):
+    all: bool
+    of: bool
+    the: bool
+    booleans: bool
+    but: bool
+    no: bool
+    other: bool
+    types: bool
+
+from cyclonedds.idl import IdlStruct
+from cyclonedds.idl.types import uint64
+from cyclonedds.idl.annotate import key
+from dataclasses import dataclass
+
+@dataclass
+class MyMessage(IdlStruct):
+    msg_id: int
+    key(msg_id)
+    msg: str
+    sender: str
+
+message = MyMessage(msg_id=11, msg="Hi there!", sender="CycloneDDS")
+
+from cyclonedds.idl import IdlUnion
+from cyclonedds.idl.types import case, default, uint8
+
+
+class MyUnion(IdlUnion, discriminator=uint8, discriminator_is_key=True):
+    msg: case[0, str]
+    userid: case[[1, 2], int]
+    amount: default[int]
+
