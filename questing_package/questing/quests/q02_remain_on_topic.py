@@ -25,5 +25,5 @@ class RemainOnTopicQuest(Quest):
 
     def _check_followers_topic(self, value):
         assert isinstance(value, Topic)
-        assert value.typename == "__main__::CuriousFish"
+        assert value.typename == "CuriousFish"
         assert value.name == "followers"

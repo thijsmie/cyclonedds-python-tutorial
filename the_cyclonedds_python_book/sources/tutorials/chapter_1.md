@@ -20,7 +20,7 @@ Welcome! This interactive tutorial teaches you the basics of DDS and the Cyclone
     <div class="signature">Captain A. Corsaro</div>
 </div>
 
-All story fragments from the journal will be presented in boxes like the one above. Explanations and instructions are presented as normal text like this. Please enable "Live Code" by selecting the rocket in the top bar and then execute the code cell below to initialize your personal copy of Captain Corsaro's journal
+All story fragments from the journal will be presented in boxes like the one above. Explanations and instructions are presented as normal text like this. Please enable "Live Code" by selecting the rocket in the top bar and then execute the code cell below to initialize your personal copy of Captain Corsaro's journal.
 
 ```{code-cell} python
 from questing import Journal
@@ -39,9 +39,6 @@ DDS is a publish-subscribe based networking system that allows you to write appl
 </div>
 
 To join our captain on the DDS sea, or rather *DDS Domain* we use a `DomainParticipant`. A `DomainParticipant` is the central entity in any DDS application. The Domain itself is more of a virtual concept, not directly created but made up of all the participants on a network. You can have multiple domains running next to each other, identified by a *domain id*. They will remain completely separated.
-
-
-The cell below retrieves the captains journal, which retrieves your quests and tracks your progress. `quest.prompt()` will display the current quest and subtasks. If you are stuck you can call `quest.hint()` to be helped along. `quest.solution()` will give you the full solution if you are really at a loss.
 
 <hr>
 
@@ -103,7 +100,7 @@ You can turn Python classes into IDL structs by inheriting from `IdlStruct` from
 > Create a datatype for the `CuriousFish` that has a `FishType` (Shimmering, Matte or Metallic), an integer number of dorsal fins and a string name.
 > Then import `Topic` from `cyclonedds.topic` and create a `Topic` named `followers`. A `Topic` takes three arguments: a `DomainParticipant`, a name and the datatype.
 >
-> **Note**: your variables persist between cells, you can use the participant from the previous quest!
+> **Note**: your variables persist between cells, you can use the participant from the previous quest! However, a time-out can occur, which will usually result in a DDS_PRECONDITION_NOT_MET error. Try to re-run previous cells to re-initialize variables if this happens.
 >
 > Example datatype:
 > ```python
@@ -122,14 +119,16 @@ You can turn Python classes into IDL structs by inheriting from `IdlStruct` from
 quest = journal.quest("remain-on-topic")
 quest.start()
 
+from enum import Enum
 from dataclasses import dataclass
-from cyclonedds.idl import IdlStruct, IdlEnum
+from cyclonedds.idl import IdlStruct
 
-class FishType(IdlEnum):
+class FishType(Enum):
     Shimmering = 0
     Matte = 1
     Metallic = 2
 
+@dataclass
 class CuriousFish(IdlStruct):
     fish_type: FishType
     # define dorsal_fins

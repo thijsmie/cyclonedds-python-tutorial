@@ -39,7 +39,7 @@ class WaitForTheTideQuest(Quest):
 
     def _check_reader(self, value):
         assert isinstance(value, DataReader)
-        assert value.topic.typename == "__main__::Wave"
+        assert value.topic.typename == "Wave"
         assert value.topic.name == "Wave"
         assert Policy.Reliability.Reliable in value.get_qos()
         random = Random(self._seed)
