@@ -25,9 +25,11 @@ RUN adduser --disabled-password \
 RUN chown -R ${NB_UID} ${HOME}
 WORKDIR ${HOME}
 USER ${NB_USER}
-RUN echo "export PATH=${HOME}/.local/bin:\$PATH" >> ${HOME}/.profile
+RUN echo "export PATH=${HOME}/.local/bin:/usr/local/bin:\$PATH" >> ${HOME}/.bashrc && \
+    echo "export LD_LIBRARY_PATH=/usr/local/lib:\$LD_LIBRARY_PATH" >> ${HOME}/.bashrc
+ENV PATH ${HOME}/.local/bin:$PATH
 ENV PATH ${HOME}/.local/bin:$PATH
 
 RUN python3 -m pip install --upgrade --user --no-cache-dir pip wheel setuptools
-RUN python3 -m pip install --upgrade --user --no-cache-dir notebook jupyterhub jupyterlab
-RUN python3 -m pip install --upgrade --user --no-cache-dir git+https://github.com/eclipse-cyclonedds/cyclonedds-python
+RUN python3 -m pip install --upgrade --user --no-cache-dir notebook jupyterhub jupyterlab \
+    git+https://github.com/eclipse-cyclonedds/cyclonedds-python ipycanvas

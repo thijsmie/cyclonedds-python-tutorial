@@ -1,1 +1,0 @@
-from questing.journal import Journal
