@@ -184,7 +184,7 @@ class CuriousFish(IdlStruct):
 quest.check("curious-fish", CuriousFish)
 
 from cyclonedds.topic import Topic
-topic = Topic(participant, "follower_fish", CuriousFish)
+topic = Topic(participant, "followers", CuriousFish)
 
 quest.check("followers-topic", topic)
 quest.finish()
@@ -382,6 +382,8 @@ quest.check("the-disposed-atolls", islands)
 quest.finish()
 ```
 
+<div id="chapter-1->
+
 > There are no hints for this quest, it is composed of familiar parts. Try to go back to previous quests for inspiration.
 
 ````{admonition} Click to show the solution.
@@ -394,6 +396,7 @@ quest.start()
 class Island(IdlStruct):
     X: float
     Y: float
+    size: float
     name: str
 
 quest.check("island", Island)
@@ -403,7 +406,7 @@ writer = DataWriter(participant, topic)
 reader = DataReader(participant, topic)
 
 # write central island
-writer.write(Island(X=0.7, Y=-6.6, name="Dominio"))
+writer.write(Island(X=0.7, Y=-6.6, size=4, name="Dominio"))
 quest.check("writer-written", writer)
 
 # read all islands

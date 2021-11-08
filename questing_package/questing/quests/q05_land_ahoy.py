@@ -1,3 +1,4 @@
+from IPython.core.display import HTML
 from questing.quest import Quest
 from questing.types import Island
 from questing.mapdraw import MapDraw
@@ -51,6 +52,18 @@ class LandAhoyQuest(Quest):
 
         return islands
 
+
+    def _construct_html(self):
+        islands = '\n'.join([f"map.add_island(\"{island.name}\", {island.X}, {island.Y}, {island.size});" for island in (self._samples + [self._user_sample])])
+        return f"""
+<canvas id="canvas-map" width="{self._w}", height="{self._h}"></canvas>
+<script>
+    var map = Map();
+    {islands}
+    map.draw();
+</script>
+"""
+
     def start(self):
         super().start()
         self._dp = DomainParticipant()
@@ -60,7 +73,7 @@ class LandAhoyQuest(Quest):
     def finish(self, no_out=False):
         super().finish(no_out)
         if self._solved:
-            display(MapDraw(islands=self._samples + [self._user_sample], w=self._w, h=self._h).draw())
+            display(HTML(self._construct_html()))
 
     def _check_island(self, value):
         assert is_dataclass(value)
