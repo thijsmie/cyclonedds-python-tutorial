@@ -50,11 +50,6 @@ The cell below retrieves the captains journal, which retrieves your quests and t
 >  * Pass the `DomainParticipant` to `quest.check("domain-participant", participant)`
 
 ```{code-cell} python
-from questing import Journal
-
-journal = Journal(seed=None)
-print(journal.seed)
-
 quest = journal.quest("domain-participant")
 quest.start()
 

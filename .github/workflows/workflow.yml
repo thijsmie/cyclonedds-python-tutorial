@@ -1,0 +1,22 @@
+name: Build the Book
+on:
+  push:
+    branches:
+      - working-on-doc-book
+jobs:
+  run:
+    name: Run
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Setup Python 3.9.7
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
+    - name: Run pip install
+      run: pip install jupyter-book ghp-import
+    - name: Build the book
+      run: jupyter-book build the_cyclonedds_python_book --all
+    - name: Deploy to Github Pages
+      run: ghp-import -n -p -f the_cyclonedds_python_book/_build/html
