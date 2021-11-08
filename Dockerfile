@@ -1,5 +1,5 @@
 # built from docker-base, do it this way to speed up binder launch
-FROM thijsmie/eclipse-cyclonedds-python-docker-base:test-2
+FROM thijsmie/eclipse-cyclonedds-python-docker-base:test-3
 
 # Make sure the contents of our repo are in ${HOME}
 COPY . ${HOME}

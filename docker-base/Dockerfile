@@ -26,9 +26,11 @@ RUN chown -R ${NB_UID} ${HOME}
 WORKDIR ${HOME}
 USER ${NB_USER}
 RUN echo "export PATH=${HOME}/.local/bin:/usr/local/bin:\$PATH" >> ${HOME}/.bashrc && \
-    echo "export LD_LIBRARY_PATH=/usr/local/lib:\$LD_LIBRARY_PATH" >> ${HOME}/.bashrc
-ENV PATH ${HOME}/.local/bin:$PATH
-ENV PATH ${HOME}/.local/bin:$PATH
+    echo "export LD_LIBRARY_PATH=/usr/local/lib:\$LD_LIBRARY_PATH" >> ${HOME}/.bashrc && \
+    echo "export PATH=${HOME}/.local/bin:/usr/local/bin:\$PATH" >> ${HOME}/.profile && \
+    echo "export LD_LIBRARY_PATH=/usr/local/lib:\$LD_LIBRARY_PATH" >> ${HOME}/.profile
+ENV PATH ${HOME}/.local/bin:/usr/local/:$PATH
+ENV LD_LIBRARY_PATH /usr/local/lib:$LD_LIBRARY_PATH
 
 RUN python3 -m pip install --upgrade --user --no-cache-dir pip wheel setuptools
 RUN python3 -m pip install --upgrade --user --no-cache-dir notebook jupyterhub jupyterlab \

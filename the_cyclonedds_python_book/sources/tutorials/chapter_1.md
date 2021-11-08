@@ -20,37 +20,7 @@ Welcome! This interactive tutorial teaches you the basics of DDS and the Cyclone
     <div class="signature">Captain A. Corsaro</div>
 </div>
 
-All story fragments from the journal will be presented in boxes like the one above. Explanations and instructions are presented as normal text like this. 
-
-If you are working with google colab the cell here will initialize your copy of Cyclone DDS Python:
-```{code-cell} python
-!pip install --update cmake
-!apt-get install gcc git zip bison
-import subprocess 
-import sys
-import os
-subprocess.call(["git", "clone", "https://github.com/eclipse-cyclonedds/cyclonedds"])
-subprocess.call(["mkdir", "cyclonedds/build", "cyclonedds/install"])
-p = subprocess.Popen(["cmake", "..", "-DCMAKE_INSTALL_PREFIX=../install", "-DENABLE_TOPIC_DISCOVERY=ON", "-DENABLE_TYPE_DISCOVERY=ON"], cwd=os.getcwd()+"/cyclonedds/build", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-output, err = p.communicate()
-if p.returncode != 0:
-  print(output)
-  print(err)
-  return
-p = subprocess.Popen(["cmake", "--build", ".", "--target", "install"], cwd=os.getcwd()+"/cyclonedds/build", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-output, err = p.communicate()
-if p.returncode != 0:
-  print(output)
-  print(err)
-  return
-home = os.getcwd() + "/cyclonedds/install"
-%env CYCLONEDDS_HOME=$home
-%env CMAKE_PREFIX_PATH=$home
-!pip install --upgrade cmake ninja
-!pip install git+https://github.com/eclipse-cyclonedds/cyclonedds-python
-```
-
-Please execute the code cell below to initialize your personal copy of Captain Corsaro's journal.
+All story fragments from the journal will be presented in boxes like the one above. Explanations and instructions are presented as normal text like this. Please enable "Live Code" by selecting the rocket in the top bar and then execute the code cell below to initialize your personal copy of Captain Corsaro's journal
 
 ```{code-cell} python
 from questing import Journal
