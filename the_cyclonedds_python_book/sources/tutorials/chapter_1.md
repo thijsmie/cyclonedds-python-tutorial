@@ -7,7 +7,7 @@ jupytext:
 kernelspec:
   display_name: Python 3
   language: python
-  name: python 3
+  name: python
 ---
 
 # Chapter 1: Getting your feet wet
@@ -359,7 +359,7 @@ Let's put together what we learned so far. Create a new `Island` datatype with a
 quest = journal.quest("land-ahoy")
 quest.start()
 
-from cyclonedds.idl.annotatations import key
+from cyclonedds.idl.annotations import key
 
 # You will have to annotate the Island.name as key. Here is an example of how to do that
 
@@ -398,7 +398,7 @@ quest.finish()
 ````{admonition} Click to show the solution.
 :class: tip, toggle
 ``` python
-from cyclonedds.idl.annotatations import key
+from cyclonedds.idl.annotations import key
 
 quest = journal.quest("land-ahoy")
 quest.start()
