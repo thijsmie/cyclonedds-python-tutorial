@@ -1,7 +1,6 @@
 from IPython.core.display import HTML, Javascript
 from questing.quest import Quest
 from questing.types import Island
-from questing.mapdraw import MapDraw
 from cyclonedds.sub import DataReader
 from cyclonedds.pub import DataWriter
 from cyclonedds.domain import DomainParticipant
