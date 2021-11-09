@@ -30,6 +30,14 @@ class Quest:
         self._checked = {k: False for k in self._checkers.keys()}
 
     def finish(self, no_out=False):
+        if self._journal._finish_without_error:
+            if hasattr(self, "pre_finish"):
+                self._pre_finish()
+            self._solved = True
+            if not no_out:
+                display(Markdown(f"<span style=\"color:green\">Quest {self._name} autosolved.</span>"))
+            return
+
         self._started = False
         self._solved = all(self._checked.values())
 
@@ -49,6 +57,9 @@ class Quest:
             display(Markdown(f"<span style=\"color:red\">Quest {self._name} is incomplete.</span>"))
 
     def check(self, task, item):
+        if self._journal._finish_without_error:
+            return
+
         if not self._started:
             return
 

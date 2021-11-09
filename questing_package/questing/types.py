@@ -1,4 +1,5 @@
 from cyclonedds.idl import IdlStruct
+from cyclonedds.idl.annotations import key
 from dataclasses import dataclass
 from enum import Enum
 
@@ -22,6 +23,7 @@ class Island(IdlStruct, typename="Island"):
     Y: float
     size: float
     name: str
+    key(name)
 
 
 @dataclass

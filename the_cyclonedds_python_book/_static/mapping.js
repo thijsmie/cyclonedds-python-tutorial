@@ -1,13 +1,13 @@
 
 function gen_polygon(seed, center, scale) {
-    var gen = new Math.seedrandom(seed);
-    const pre_angles = [...Array(10).keys()].map(i => gen.random());
+    var myrng = new Math.seedrandom(seed);
+    const pre_angles = [...Array(10).keys()].map(i => myrng());
     const pre_angles_sum = pre_angles.reduce((i,j) => i+j, 0) / (2 * Math.PI);
     const cumulativeSummer = (sum => value => sum += value)(0);
-    const pre_angles_cumulative = pre_angles_sum.map(cumulativeSummer);
+    const pre_angles_cumulative = pre_angles.map(cumulativeSummer);
     const angles = pre_angles_cumulative.map(i => i / pre_angles_sum);
-    const dist = [...Array(angles.length)].map(i => scale * (1 + gen.random()));
-    const gdist = dist.map(d => d * (1 + gen.random()) / 2.0);
+    const dist = [...Array(angles.length)].map(i => scale * (1 + myrng()));
+    const gdist = dist.map(d => d * (1 + myrng()) / 2.0);
 
     function to_carthesian(r, i) { return [r * Math.cos(angles[i]) + center[0], r * Math.sin(angles[i]) + center[1]]; };
     const outer = dist.map(to_carthesian);
@@ -16,13 +16,13 @@ function gen_polygon(seed, center, scale) {
 };
 
 const MapDraw = {
-    LAYER_BACKING = 0,
-    LAYER_ISLANDS = 1,
-    LAYER_BOATS = 2,
-    LAYER_BORDER = 3
+    LAYER_BACKING: 0,
+    LAYER_ISLANDS: 1,
+    LAYER_BOATS: 2,
+    LAYER_BORDER: 3
 };
 
-function Map() {
+function IMap() {
     self = {
         islands: [],
         boats: [],
@@ -48,15 +48,15 @@ function Map() {
     };
 
     self.draw_islands = function(canvas, ocanvas) {
-        self.islands.forEach(i => {
-            var polys = gen_polygon(island.name, [island.X + self.w/2., island.Y + self.h/2.], island.size);
+        self.islands.forEach(island => {
+            var polys = gen_polygon(island.name, [island.X + self.w/2. - 30, island.Y + self.h/2.], island.size);
 
-            canvas.polygon(polys[0], {roughness:2, fill: "#c19149", bowing: 0.4, fillStyle: 'solid', strokeWidth: 1.5});
-            canvas.polygon(polys[0], {roughness:2, fill: "#a57c3e", bowing: 0.4, fillStyle: 'hachure', strokeWidth: 1.5});
-            canvas.polygon(polys[1], {roughness:2, fill: "#267f08", bowing: 0.4, fillStyle: 'cross-hatch', strokeWidth: 1.1});
+            canvas.polygon(polys[0], {roughness:2, fill: "#c19149", bowing: 0.4, fillStyle: 'solid', stroke: 'rgba(0,0,0,0)'});
+            canvas.polygon(polys[0], {roughness:2, fill: "#a57c3e", bowing: 0.4, fillStyle: 'hachure', stroke: 'rgba(0,0,0,0)'});
+            canvas.polygon(polys[1], {roughness:2, fill: "#267f08", bowing: 0.4, fillStyle: 'cross-hatch', stroke: 'rgba(0,0,0,0)'});
 
             ocanvas.fillStyle = "black"
-            ocanvas.font = "25px \"Dancing Script\""
+            ocanvas.font = "20px \"Dancing Script\""
             ocanvas.textBaseline = "bottom"
             ocanvas.textAlign = "left"
             ocanvas.fillText(
@@ -85,17 +85,17 @@ function Map() {
     };
 
     self.draw_border = function(canvas, ocanvas) {
-        canvas.rectangle(0, 0, 20, self.h, {roughness:0, fill: "#E9C181", bowing: 0, fillStyle: 'solid', strokeWidth: 2});
-        canvas.rectangle(0, 0, self.w, 30, {roughness:0, fill: "#E9C181", bowing: 0, fillStyle: 'solid', strokeWidth: 2});
-        canvas.rectangle(0, self.h-20, self.w, self.h, {roughness:0, fill: "#E9C181", bowing: 0, fillStyle: 'solid', strokeWidth: 2});
-        canvas.rectangle(self.w-20, 0, 20, self.h, {roughness:0, fill: "#E9C181", bowing: 0, fillStyle: 'solid', strokeWidth: 2});
+        canvas.rectangle(0, 0, 20, self.h, {roughness:0, fill: "#E9C181", bowing: 0, fillStyle: 'solid', stroke: 'rgba(0,0,0,0)'});
+        canvas.rectangle(0, 0, self.w, 30, {roughness:0, fill: "#E9C181", bowing: 0, fillStyle: 'solid', stroke: 'rgba(0,0,0,0)'});
+        canvas.rectangle(0, self.h-20, self.w, self.h, {roughness:0, fill: "#E9C181", bowing: 0, fillStyle: 'solid', stroke: 'rgba(0,0,0,0)'});
+        canvas.rectangle(self.w-20, 0, 20, self.h, {roughness:0, fill: "#E9C181", bowing: 0, fillStyle: 'solid', stroke: 'rgba(0,0,0,0)'});
 
-        canvas.rectangle(20, 30, self.w-40, self.h-50, {roughness:2, fill: "#ad3c0f", bowing: 0, fillStyle: 'cross-hatch', strokeWidth: 2});
+        canvas.rectangle(20, 30, self.w-40, self.h-50, {roughness:2, bowing: 0, strokeWidth: 2});
 
         ocanvas.fillStyle = "#873110"
         ocanvas.font = "32px \"Dancing Script\""
         ocanvas.textBaseline = "middle"
-        ocanvas.textSlign = "center"
+        ocanvas.textAlign = "center"
         ocanvas.fillText('The Disposed Atolls', self.w/2, 15)
     };
 
@@ -106,9 +106,10 @@ function Map() {
         draw_border = draw_border ?? true;
 
         var ocanvas = document.getElementById('canvas-map');
-        self.w = ocanvas.width;
-        self.h = ocanvas.heigth;
+        self.w = ocanvas.getBoundingClientRect().width;
+        self.h = ocanvas.getBoundingClientRect().height;
         var canvas = rough.canvas(ocanvas, {width: self.w, height: self.h});
+        ocanvas = ocanvas.getContext('2d');
 
         if (draw_backing) self.draw_backing(canvas, ocanvas);
         if (draw_islands) self.draw_islands(canvas, ocanvas);

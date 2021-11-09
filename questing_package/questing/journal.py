@@ -12,6 +12,7 @@ from .quests.q12_hey_listen import HeyListenQuest
 
 class Journal:
     _debug_mode = False
+    _finish_without_error = False
     _questscls_ch1 = [
         DomainParticipantQuest,
         RemainOnTopicQuest,
@@ -40,7 +41,7 @@ class Journal:
             if quest._name == name:
                 quest.journal = self
                 return quest
-            if not quest._solved:
+            if not quest._solved and not self._finish_without_error:
                 print(f"You did not finish previous quest {quest._name} yet!")
                 raise _StopExecution
         print(f"Arrr I do not know what you are talking about! There be no such thing as the {name} quest!")

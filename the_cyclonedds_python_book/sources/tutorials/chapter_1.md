@@ -7,7 +7,7 @@ jupytext:
 kernelspec:
   display_name: Python 3
   language: python
-  name: python
+  name: python 3
 ---
 
 # Chapter 1: Getting your feet wet
@@ -345,6 +345,7 @@ Let's put together what we learned so far. Create a new `Island` datatype with a
 
 > Tasks:
 >  * Create the `Island` datatype and pass it to `quest.check("island", Island)`.
+>     * You will have to annotate the `Island.name` as `key`. An example is provided.
 >  * Create the `DisposedAtolls` topic.
 >  * Create a `DataWriter` and write a central island. Then check the writer with `quest.check("writer-written", writer)`
 >  * Create a `DataReader` and read all samples. Check your resulting set of samples with `quest.check("the-disposed-atolls", islands)`
@@ -356,11 +357,19 @@ Let's put together what we learned so far. Create a new `Island` datatype with a
 
 ```{code-cell} python
 quest = journal.quest("land-ahoy")
-quest.prompt()
 quest.start()
 
-@cdr
-class Island:
+from cyclonedds.idl.annotatations import key
+
+# You will have to annotate the Island.name as key. Here is an example of how to do that
+
+class Person(IdlStruct):
+    a: int
+    key(a)
+
+
+@dataclass
+class Island(IdlStruct):
     pass
 
 quest.check("island", Island)
@@ -388,7 +397,9 @@ quest.finish()
 
 ````{admonition} Click to show the solution.
 :class: tip, toggle
-```
+``` python
+from cyclonedds.idl.annotatations import key
+
 quest = journal.quest("land-ahoy")
 quest.start()
 
@@ -398,6 +409,7 @@ class Island(IdlStruct):
     Y: float
     size: float
     name: str
+    key(name)
 
 quest.check("island", Island)
 participant = DomainParticipant()

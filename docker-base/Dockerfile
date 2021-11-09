@@ -34,4 +34,4 @@ ENV LD_LIBRARY_PATH /usr/local/lib:$LD_LIBRARY_PATH
 
 RUN python3 -m pip install --upgrade --user --no-cache-dir pip wheel setuptools
 RUN python3 -m pip install --upgrade --user --no-cache-dir notebook jupyterhub jupyterlab \
-    git+https://github.com/eclipse-cyclonedds/cyclonedds-python ipycanvas
+    git+https://github.com/eclipse-cyclonedds/cyclonedds-python

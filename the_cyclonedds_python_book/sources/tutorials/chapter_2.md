@@ -7,7 +7,7 @@ jupytext:
 kernelspec:
   display_name: Python 3
   language: python
-  name: python
+  name: python 3
 ---
 
 # Chapter 2: A Beach Holiday?
